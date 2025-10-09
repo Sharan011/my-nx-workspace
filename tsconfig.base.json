@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@angular-demo/auth": ["auth/src/index.ts"],
+      "@angular-demo/data": ["data/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
