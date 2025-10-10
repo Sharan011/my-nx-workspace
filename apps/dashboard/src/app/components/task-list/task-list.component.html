@@ -1,0 +1,75 @@
+<div class="task-container">
+  <header class="navbar">
+    <h1>📋 Task Management</h1>
+    <div class="user-info">
+      <span>Welcome, {{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+      <span class="role-badge">{{ currentUser?.role }}</span>
+      <button (click)="logout()" class="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="actions">
+      <button (click)="showCreateForm = !showCreateForm" class="create-btn">
+        {{ showCreateForm ? '✖ Cancel' : '+ Create Task' }}
+      </button>
+    </div>
+
+    <div *ngIf="showCreateForm" class="create-form">
+      <h3>Create New Task</h3>
+      <div class="form-group">
+        <label>Title</label>
+        <input [(ngModel)]="newTask.title" placeholder="Enter task title" />
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newTask.description" placeholder="Enter task description"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Status</label>
+          <select [(ngModel)]="newTask.status">
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select [(ngModel)]="newTask.priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+      </div>
+      <button (click)="createTask()" class="submit-btn">Create Task</button>
+    </div>
+
+    <div class="tasks-grid">
+      <div *ngFor="let task of tasks" class="task-card" [class.priority-high]="task.priority === 'high'">
+        <div class="task-header">
+          <h3>{{ task.title }}</h3>
+          <span class="priority-badge" [class]="'priority-' + task.priority">{{ task.priority }}</span>
+        </div>
+        <p class="description">{{ task.description }}</p>
+        <div class="task-meta">
+          <span class="status-badge" [class]="'status-' + task.status">{{ task.status }}</span>
+          <span class="created-by">By: {{ task.createdBy?.firstName }} {{ task.createdBy?.lastName }}</span>
+        </div>
+        <div class="task-actions" *ngIf="canEdit()">
+          <select (change)="updateStatus(task, $event.target.value)" [value]="task.status">
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+          <button *ngIf="canDelete()" (click)="deleteTask(task.id!)" class="delete-btn">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="tasks.length === 0" class="no-tasks">
+      <p>No tasks yet. Create your first task!</p>
+    </div>
+  </div>
+</div>
